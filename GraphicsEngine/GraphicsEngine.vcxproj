@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{c5d9b7bd-5947-4bab-8bd9-94e707a99433}</ProjectGuid>
+    <RootNamespace>GraphicsEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)..\Build\Win32\$(Configuration)\</OutDir>
+    <IncludePath>./;../../DUOLMath/include/;C:\Program Files (x86)\Visual Leak Detector\include;$(IncludePath);$(ProjectDir)include\;$(SolutionDir)..\Dependency\boost_1_80_0\</IncludePath>
+    <LibraryPath>C:\Program Files (x86)\Visual Leak Detector\lib\Win32;$(LibraryPath);$(SolutionDir)..\Dependency\boost_1_80_0\stage\lib;$(OutDir)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)..\Build\Win32\$(Configuration)\</OutDir>
+    <LibraryPath>C:\Program Files (x86)\Visual Leak Detector\lib\Win32;$(LibraryPath);$(SolutionDir)..\Dependency\boost_1_80_0\stage\lib;$(OutDir)</LibraryPath>
+    <IncludePath>./;../../DUOLMath/include/;$(VC_IncludePath);$(WindowsSDK_IncludePath);;$(ProjectDir)include\;$(SolutionDir)..\Dependency\boost_1_80_0\</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)..\Build\x64\$(Configuration)\</OutDir>
+    <LibraryPath>C:\Program Files (x86)\Visual Leak Detector\lib\Win64;$(LibraryPath);$(SolutionDir)..\Dependency\boost_1_80_0\stage\lib;$(OutDir)</LibraryPath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <IncludePath>./;../../DUOLMath/include/;C:\Program Files (x86)\Visual Leak Detector\include;$(ProjectDir)include\;$(SolutionDir)..\Dependency\boost_1_80_0\</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)..\Build\x64\$(Configuration)\</OutDir>
+    <LibraryPath>C:\Program Files (x86)\Visual Leak Detector\lib\Win64;$(LibraryPath);$(SolutionDir)..\Dependency\boost_1_80_0\stage\lib;$(OutDir)</LibraryPath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <IncludePath>./;../../DUOLMath/include/;C:\Program Files (x86)\Visual Leak Detector\include;$(ProjectDir)include\;$(SolutionDir)..\Dependency\boost_1_80_0\</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;GRAPHICSENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>Common.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Build\Win32\$(Configuration)\</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(ProjectDir)Asset" "$(OutDir)Asset\" /y /s /i</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;GRAPHICSENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>Common.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Build\Win32\$(Configuration)\</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(ProjectDir)Asset" "$(OutDir)Asset\" /y /s /i</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;GRAPHICSENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>Common.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Build\x64\$(Configuration)\</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(ProjectDir)Asset" "$(OutDir)Asset\" /y /s /i</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;GRAPHICSENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>Common.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Build\x64\$(Configuration)\</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(ProjectDir)Asset" "$(OutDir)Asset\" /y /s /i</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Core\Resource\Resource\ComputeShader.h" />
+    <ClInclude Include="include\Core\Resource\Resource\GeometryShader.h" />
+    <ClInclude Include="include\Core\Pass\BlurPass.h" />
+    <ClInclude Include="include\Core\Pass\Particle\BasicParticleObjectIDPass.h" />
+    <ClInclude Include="include\Core\Pass\Particle\BasicParticlePass.h" />
+    <ClInclude Include="include\Core\Pass\3DObject\BasicPass.h" />
+    <ClInclude Include="include\Core\DirectX11\BlendState.h" />
+    <ClInclude Include="include\Core\DirectX11\d3dx11effect.h" />
+    <ClInclude Include="include\Core\Pass\DeferredRenderPass.h" />
+    <ClInclude Include="include\Core\DirectX11\Depth.h" />
+    <ClInclude Include="include\Core\DirectX11\DepthStencil.h" />
+    <ClInclude Include="include\Core\DirectX11\Device.h" />
+    <ClInclude Include="include\Core\DirectX11\DXEngine.h" />
+    <ClInclude Include="include\Core\Pass\ShaderFlagsManager.h" />
+    <ClInclude Include="include\Core\Resource\Factory.h" />
+    <ClInclude Include="include\Core\Resource\PerlinNoise.hpp" />
+    <ClInclude Include="include\Export\dllExport.h" />
+    <ClInclude Include="include\Core\DirectX11\geometrygenerator.h" />
+    <ClInclude Include="include\Export\IGraphicsEngine.h" />
+    <ClInclude Include="include\Core\Resource\Resource\ParticleMesh.h" />
+    <ClInclude Include="include\Core\Pass\PassBase.h" />
+    <ClInclude Include="include\Core\Pass\PostProcessingPass.h" />
+    <ClInclude Include="include\Core\DirectX11\RasterizerState.h" />
+    <ClInclude Include="include\Core\DirectX11\Renderer.h" />
+    <ClInclude Include="include\Export\RenderingData.h" />
+    <ClInclude Include="include\Core\DirectX11\RenderTarget.h" />
+    <ClInclude Include="include\Core\DirectX11\RenderTexture.h" />
+    <ClInclude Include="include\Core\Resource\ResourceManager.h" />
+    <ClInclude Include="include\Core\DirectX11\SamplerState.h" />
+    <ClInclude Include="include\Core\Pass\TextureRenderPass.h" />
+    <ClInclude Include="include\util\STLInclude.h" />
+    <ClInclude Include="include\Core\Resource\Resource\VBIBMesh.h" />
+    <ClInclude Include="include\util\TypeDefine.h" />
+    <ClInclude Include="include\util\VertexDesc.h" />
+    <ClInclude Include="include\Core\Pass\3DObject\WirePass.h" />
+    <ClInclude Include="include\Core\DirectX11\ObjectIDTexture.h" />
+    <ClInclude Include="include\Core\Pass\3DObject\OnlyObjectIDPass.h" />
+    <ClInclude Include="include\Core\Pass\3DObject\NoLit_OrthoGraphicsPass.h" />
+    <ClInclude Include="include\Core\Pass\Particle\OITParticlePass.h" />
+    <ClInclude Include="include\Core\DirectX11\OrderIndependentTransparency.h" />
+    <ClInclude Include="include\Core\Pass\Particle\ParticleOutLinePass.h" />
+    <ClInclude Include="include\Core\Pass\OutLinePass.h" />
+    <ClInclude Include="include\Core\Pass\3DObject\SkyBoxPass.h" />
+    <ClInclude Include="include\Core\Resource\Resource\ResourceBase.h" />
+    <ClInclude Include="include\Core\Resource\Resource\PixelShader.h" />
+    <ClInclude Include="include\Core\Resource\Resource\VertexShader.h" />
+    <ClInclude Include="include\Core\Resource\Resource\Texture.h" />
+    <ClInclude Include="include\Core\Resource\Resource\ShaderClassInstance.h" />
+    <ClInclude Include="include\Core\Pass\OITBlendPass.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Core\Pass\OITBlendPass.cpp" />
+    <ClCompile Include="src\Core\Resource\Resource\ShaderClassInstance.cpp" />
+    <ClCompile Include="src\Core\Pass\3DObject\SkyBoxPass.cpp" />
+    <ClCompile Include="src\Core\Pass\BlurPass.cpp" />
+    <ClCompile Include="src\Core\Pass\OutLinePass.cpp" />
+    <ClCompile Include="src\Core\Pass\Paritcle\ParticleOutLinePass.cpp" />
+    <ClCompile Include="src\Core\DirectX11\OrderIndependentTransparency.cpp" />
+    <ClCompile Include="src\Core\Pass\Paritcle\OITParticlePass.cpp" />
+    <ClCompile Include="src\Core\Pass\Paritcle\BasicParticleObjectIDPass.cpp" />
+    <ClCompile Include="src\Core\Pass\3DObject\NoLit_OrthoGraphicsPass.cpp" />
+    <ClCompile Include="src\Core\Pass\3DObject\OnlyObjectIDPass.cpp" />
+    <ClCompile Include="src\Core\DirectX11\ObjectIDTexture.cpp" />
+    <ClCompile Include="src\Core\Pass\Paritcle\BasicParticlePass.cpp" />
+    <ClCompile Include="src\Core\Pass\3DObject\BasicPass.cpp" />
+    <ClCompile Include="src\Core\DirectX11\BlendState.cpp" />
+    <ClCompile Include="src\Core\Pass\DeferredRenderPass.cpp" />
+    <ClCompile Include="src\Core\DirectX11\Depth.cpp" />
+    <ClCompile Include="src\Core\DirectX11\DepthStencil.cpp" />
+    <ClCompile Include="src\Core\DirectX11\Device.cpp" />
+    <ClCompile Include="src\Core\Pass\ShaderFlagsManager.cpp" />
+    <ClCompile Include="src\Core\Resource\Resource\ComputeShader.cpp" />
+    <ClCompile Include="src\Core\Resource\Resource\GeometryShader.cpp" />
+    <ClCompile Include="src\Core\Resource\Resource\PixelShader.cpp" />
+    <ClCompile Include="src\Core\Resource\Resource\Texture.cpp" />
+    <ClCompile Include="src\Core\Resource\Resource\VertexShader.cpp" />
+    <ClCompile Include="src\dllmain.cpp" />
+    <ClCompile Include="src\Core\DirectX11\DXEngine.cpp" />
+    <ClCompile Include="src\Core\Resource\Factory.cpp" />
+    <ClCompile Include="src\Core\DirectX11\GeometryGenerator.cpp" />
+    <ClCompile Include="src\Export\IGraphicsEngine.cpp" />
+    <ClCompile Include="src\Core\Resource\Resource\ParticleMesh.cpp" />
+    <ClCompile Include="src\Core\Pass\PostProcessingPass.cpp" />
+    <ClCompile Include="src\Core\DirectX11\RasterizerState.cpp" />
+    <ClCompile Include="src\Core\DirectX11\Renderer.cpp" />
+    <ClCompile Include="src\Core\DirectX11\RenderTarget.cpp" />
+    <ClCompile Include="src\Core\DirectX11\RenderTexture.cpp" />
+    <ClCompile Include="src\Core\Resource\ResourceManager.cpp" />
+    <ClCompile Include="src\Core\DirectX11\SamplerState.cpp" />
+    <ClCompile Include="src\Core\Pass\TextureRenderPass.cpp" />
+    <ClCompile Include="src\Core\Resource\Resource\VBIBMesh.cpp" />
+    <ClCompile Include="src\Core\Pass\3DObject\WirePass.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

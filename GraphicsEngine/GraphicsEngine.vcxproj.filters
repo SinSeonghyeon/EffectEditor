@@ -1,0 +1,296 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{cd0bd6b4-636b-4dee-b0e5-394ecd1624fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\HLSL">
+      <UniqueIdentifier>{884f88dd-8528-4807-8f01-0b4990271c61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header\utill">
+      <UniqueIdentifier>{f0989ae2-b95d-4b1b-bdfd-f0d82000ce18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Core\Pass\Particle\BasicParticlePass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\3DObject\BasicPass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\BlendState.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\d3dx11effect.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\DeferredRenderPass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\Depth.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\DepthStencil.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\Device.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\DXEngine.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\Factory.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\geometrygenerator.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Export\IGraphicsEngine.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\Resource\ParticleMesh.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\PassBase.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\PostProcessingPass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\RasterizerState.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\Renderer.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Export\RenderingData.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\RenderTarget.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\RenderTexture.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\ResourceManager.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\SamplerState.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\TextureRenderPass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\util\STLInclude.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\Resource\VBIBMesh.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\util\VertexDesc.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\3DObject\WirePass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Export\dllExport.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\util\TypeDefine.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\ObjectIDTexture.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\3DObject\OnlyObjectIDPass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\Particle\BasicParticleObjectIDPass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\3DObject\NoLit_OrthoGraphicsPass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\Particle\OITParticlePass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\DirectX11\OrderIndependentTransparency.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\ShaderFlagsManager.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\Particle\ParticleOutLinePass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\OutLinePass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\BlurPass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\PerlinNoise.hpp">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\3DObject\SkyBoxPass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\Resource\ResourceBase.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\Resource\VertexShader.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\Resource\GeometryShader.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\Resource\ComputeShader.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\Resource\PixelShader.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\Resource\Texture.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Resource\Resource\ShaderClassInstance.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Pass\OITBlendPass.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Core\Pass\Paritcle\BasicParticlePass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\3DObject\BasicPass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DirectX11\BlendState.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\DeferredRenderPass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DirectX11\Depth.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DirectX11\DepthStencil.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DirectX11\Device.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dllmain.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DirectX11\DXEngine.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Resource\Factory.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DirectX11\GeometryGenerator.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Export\IGraphicsEngine.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Resource\Resource\ParticleMesh.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\PostProcessingPass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DirectX11\RasterizerState.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DirectX11\Renderer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DirectX11\RenderTarget.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DirectX11\RenderTexture.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Resource\ResourceManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DirectX11\SamplerState.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\TextureRenderPass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Resource\Resource\VBIBMesh.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\3DObject\WirePass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DirectX11\ObjectIDTexture.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\3DObject\OnlyObjectIDPass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\Paritcle\BasicParticleObjectIDPass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\3DObject\NoLit_OrthoGraphicsPass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\Paritcle\OITParticlePass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\DirectX11\OrderIndependentTransparency.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\ShaderFlagsManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\Paritcle\ParticleOutLinePass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\OutLinePass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\BlurPass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\3DObject\SkyBoxPass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Resource\Resource\GeometryShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Resource\Resource\PixelShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Resource\Resource\ComputeShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Resource\Resource\VertexShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Resource\Resource\Texture.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Resource\Resource\ShaderClassInstance.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Pass\OITBlendPass.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

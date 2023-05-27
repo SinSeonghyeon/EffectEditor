@@ -6,10 +6,6 @@ Texture2D gDepthBuffer : register(t1); // 파티클을 그릴 때 앞에 오브젝트가 있으�
 Texture2D gPreDepthBuffer : register(t2); // 파티클을 그릴 때 앞에 오브젝트가 있으면 그리지 않기 위해서 뎁스버퍼를 참조한다.
 // OIT Layer를 그릴 때 생긴 뎁스 값이다.
 
-RWStructuredBuffer<PixelNode> gPixelLinkBuffer : register(u0); // 정적 리스트의 저장소 역할을 하는 버퍼. 1920 * 1080 * 저장할 픽셀 수 의 사이즈로 할당해둔다.
-RWByteAddressBuffer gFirstOffsetBuffer : register(u1); // 인덱스 버퍼. 마지막으로 기록된 픽셀의 인덱스 값을 저장하고 있다. 리스트 형식으로 저장된 픽셀을 추적한다.
-
-
 struct VertexOut
 {
     float4 PosH : SV_POSITION;
@@ -19,51 +15,22 @@ struct VertexOut
     float2 Tex : TEXCOORD;
     float3 tangent : TANGENT;
 };
-struct PSOut
+struct OITOut
 {
-    float4 Depth : SV_Target0;
-    float4 Normal : SV_Target1;
-    float4 Position : SV_Target2;
-    float4 Albedo : SV_Target3;
-    float4 Diffuse : SV_Target4;
-    float4 Specular : SV_Target5;
-    float4 ObejctID : SV_Target6;
+    float4 OverColor : SV_Target0;
+    float4 OverInfo : SV_Target1;
+    float4 AdditiveColor : SV_Target2;
+    float4 AdditiveInfo : SV_Target3;
 };
 struct OITPSOut
 {
     float4 Color : SV_Target;
     float Depth : SV_Depth;
 };
-PSOut main(VertexOut pin) : SV_TARGET
+DeferredPSOut main(VertexOut pin) : SV_TARGET
 {
-	//// 보간 때문에 법선이 더 이상 단위벡터가 아닐 수 있으므로 다시 정규화한다.
- //   pin.NormalW = normalize(pin.NormalW);
- //   float3 toEyeW = normalize(gEyePosW - pin.PosW);
- //   float4 litColor = pin.Color;
- //   float3 normalMapSample = float3(1, 1, 1);
- //   float3 NormalW = float3(1.0f, 1.0f, 1.0f);
- //   if (gUseTexure)
- //   {
- //       litColor = gDiffuseMap.Sample(samAnisotropic, pin.Tex);
- //   }
- //   if (gUseNormalMap)
- //   {
- //       normalMapSample = gNormalMap.Sample(samAnisotropic, pin.Tex).rgb;
- //       NormalW = NormalSampleToWorldSpace(normalMapSample, pin.NormalW, pin.tangent);
- //   }
- //   else
- //   {
- //       NormalW = pin.NormalW;
- //   }
-	///// 큐브 맵핑, 환경 맵. 적용 todo 나중에 다시 해보자~
-	//{
- //       float3 incident = -toEyeW;
- //       float3 reflectionVector = reflect(incident, pin.NormalW);
- //       float4 reflectionColor = gCubeMap.Sample(samAnisotropic, reflectionVector);
- //       litColor += reflectionColor;
- //   }
 
-    PSOut _psOut;
+    DeferredPSOut _psOut;
     _psOut.Position = float4(pin.PosW, 1.0f);
     _psOut.Depth = float4(pin.PosH.zzz, 1.0f);
     _psOut.Albedo = gColor;
@@ -73,8 +40,7 @@ PSOut main(VertexOut pin) : SV_TARGET
     _psOut.Normal = float4(pin.NormalW, 1.0f);
 #endif
     
-    _psOut.Diffuse = float4(1.0f, 1.0f, 1.0f, 1.0f);
-    _psOut.Specular = float4(1.0f, 1.0f, 1.0f, 1.0f);
+    _psOut.MetalicRoughnessAoSpecular = gMetalicRoughnessAoSpecular;
     _psOut.ObejctID = ObjectID;
 
     return _psOut;
@@ -109,8 +75,15 @@ OITPSOut DrawDepthPeelingPS(VertexOut pin)
 }
 
 
-void OIT_BasicLight_PS(VertexOut pin) // 픽셀을 저장하는 pixel shader
+OITOut OIT_BasicLight_PS(VertexOut pin) // 픽셀을 저장하는 pixel shader
 {
+    OITOut oitOut;
+    
+    oitOut.OverColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    oitOut.OverInfo = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    oitOut.AdditiveColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    oitOut.AdditiveInfo = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    
     const float2 posTexCoord = pin.PosH.xy / gScreenXY;
     
     float4 depth = gDepthBuffer.Sample(samAnisotropic, posTexCoord);
@@ -122,22 +95,21 @@ void OIT_BasicLight_PS(VertexOut pin) // 픽셀을 저장하는 pixel shader
         clip(depth.x - pin.PosH.z - EPSILON);
     }
     
-    uint pixelCount = gPixelLinkBuffer.IncrementCounter(); // 카운트를 기록한다.
-    
     uint2 vPos = (uint2) pin.PosH.xy;
     
-    uint startOffsetAddress = 4 * (gScreenXY.x * vPos.y + vPos.x);
-    uint oldStartOffset;
+    float currentDepth = pin.PosH.z * pin.PosH.w;
     
-    // FirstOffsetBuffer는 화면에 마지막으로 기록된 픽셀의 인덱스 값을 저장하는 버퍼이다..
-    gFirstOffsetBuffer.InterlockedExchange(
-        startOffsetAddress, pixelCount, oldStartOffset);
+    uint offset = 4 * (gScreenXY.x * vPos.y + vPos.x);
     
-    PixelNode node;
-    node.Data.Color = PackColorFromFloat4(gColor);
-    node.Data.Depth = pin.PosH.z;
-    node.Data.BlendType = 0;
-    node.Next = oldStartOffset;
+        // near : 1, far : 300  500/300 // 0.1~500 를 위한 Z 값이다.
+    float z = (499.9f / 299.0f) * (currentDepth - 1) + 0.1f;
+    float w = gColor.w * max(0.01f, min(3000.0f, 0.03f / (0.00001f + pow(abs(z) / 200.0f, 4.0f))));
+        
+    oitOut.OverColor = float4((gColor.xyz) * gColor.a, gColor.a) * w;
+    oitOut.OverInfo.x = currentDepth;
+    oitOut.OverInfo.y += 1.0f;
+    oitOut.OverInfo.z = 1 - gColor.a;
     
-    gPixelLinkBuffer[pixelCount] = node;
+    return oitOut;
+
 }

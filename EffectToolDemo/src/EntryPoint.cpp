@@ -1,4 +1,3 @@
-#include <vld.h>
 #include <Windows.h>
 #include <memory>
 #include "GameProcess.h"
@@ -19,7 +18,7 @@ int WINAPI WinMain(
 	_In_ int nCmdShow)
 {
 
-	LPCWSTR szAppName = L"EffectTool";
+	LPCWSTR szAppName = L"Version_0.4_EffectEditor";
 	HWND hWnd;
 	MSG msg;
 	WNDCLASS wndclass;

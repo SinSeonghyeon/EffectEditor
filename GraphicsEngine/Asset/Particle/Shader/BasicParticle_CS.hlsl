@@ -61,12 +61,25 @@ void CS_Main(uint3 groupID : SV_GroupID, uint3 groupTreadID : SV_GroupThreadID, 
     
     ParticleStruct p = ResultParticleBuffer[ID];
     
+    
+    
     if (p.Type == PT_EMITTER)
     {
         if (gCommonInfo.gisLooping || gCommonInfo.gParticlePlayTime <= gCommonInfo.gDuration)
         {
             if (g_EmiitionTime >= gEmission.gEmissiveTime)
             {
+                if (gEmission.gIsRateOverDistance == 1)
+                {
+                    
+                    float4x4 identityMatrix = float4x4(1, 0, 0, 0,
+                                   0, 1, 0, 0,
+                                   0, 0, 1, 0,
+                                   0, 0, 0, 1);
+                    
+                    if (all(gCommonInfo.gDeltaMatrix == identityMatrix))
+                        return;
+                }
                 //일정 시간마다//방출
                 int count = CounterBuffer[0].g_EmiiterCounter; //CounterBuffer[0].count;
                 
@@ -114,7 +127,7 @@ void CS_Main(uint3 groupID : SV_GroupID, uint3 groupTreadID : SV_GroupThreadID, 
                     p.InitEmitterPos = gCommonInfo.gTransformMatrix[3];
                     
                     [unroll]
-                    for (int i = 0; i < 15; i++)
+                    for (int i = 0; i < TrailCount; i++)
                     {
                         p.PrevPos[i] = float4(p.PosW, 1.0f);
                     }
@@ -151,7 +164,7 @@ void CS_Main(uint3 groupID : SV_GroupID, uint3 groupTreadID : SV_GroupThreadID, 
                     p.InitEmitterPos = gCommonInfo.gTransformMatrix[3];
                     
                     [unroll]
-                    for (i = 0; i < 15; i++)
+                    for (i = 0; i < TrailCount; i++)
                     {
                         p.PrevPos[i] = float4(p.PosW, 1.0f);
 
@@ -162,6 +175,15 @@ void CS_Main(uint3 groupID : SV_GroupID, uint3 groupTreadID : SV_GroupThreadID, 
                     ManualTextureSheetAnimation(vunsignedRandom4, p.QuadTexC);
                 
                     p.Age_LifeTime_Rotation_Gravity.x = 0;
+                    
+                    p.TrailWidth = lerp(gTrails.gWidthOverTrail[0], gTrails.gWidthOverTrail[1], vunsignedRandom4.x);
+                    
+                    p.TrailScrollSpeed.x = lerp(gTrails.gScrollXSpeed[0], gTrails.gScrollXSpeed[1], vunsignedRandom4.y);
+                    
+                    p.TrailScrollSpeed.y = lerp(gTrails.gScrollYSpeed[0], gTrails.gScrollYSpeed[1], vunsignedRandom4.z);
+                    
+                    p.TrailRecordTime = 0;
+                    
                 }
             }
         }
@@ -171,6 +193,8 @@ void CS_Main(uint3 groupID : SV_GroupID, uint3 groupTreadID : SV_GroupThreadID, 
         float deltaTime = gTimeStep * gCommonInfo.gSimulationSpeed;
     
         p.Age_LifeTime_Rotation_Gravity.x += deltaTime;
+        
+        p.TrailRecordTime += deltaTime;
         
         if (p.Age_LifeTime_Rotation_Gravity.x <= p.Age_LifeTime_Rotation_Gravity.y) // 파티클이 살아 있다면 업데이트를 해주자...!
         {
@@ -190,11 +214,13 @@ void CS_Main(uint3 groupID : SV_GroupID, uint3 groupTreadID : SV_GroupThreadID, 
                 p.InitEmitterPos = gCommonInfo.gTransformMatrix[3];
             }
             
-            ManualTrail(p.PrevPos, p.PosW, p.PrevPos);
+            ManualTrail(p.PrevPos, p.TrailRecordTime, p.PosW, p.TrailRecordTime, p.PrevPos);
             
-            ManualForceOverLifeTime(p.PosW, ratio, deltaTime, p.PosW);
+            ManualForceOverLifeTime(p.VelW.xyz, deltaTime, p.VelW.xyz);
             
             p.VelW.xyz += float3(0, -p.Age_LifeTime_Rotation_Gravity.w, 0) * deltaTime;
+            
+            ManualLimitVelocityOverLifeTime(ratio, p.VelW.xyz, p.VelW.xyz);
             
             p.PosW += p.VelW.xyz * deltaTime;
             
@@ -214,13 +240,15 @@ void CS_Main(uint3 groupID : SV_GroupID, uint3 groupTreadID : SV_GroupThreadID, 
 
             p.SizeW_StartSize.xy = p.SizeW_StartSize.zw * size;
             
-            ManualNoise(p.SizeW_StartSize.xy, p.VelW.xyz, p.Age_LifeTime_Rotation_Gravity.z,
+            ManualNoise(p.SizeW_StartSize.xy, p.PosW.xyz, p.Age_LifeTime_Rotation_Gravity.z,
                 gNoiseTex, samAnisotropic, deltaTime, gGamePlayTime,
-            p.SizeW_StartSize.xy, p.VelW.xyz, p.Age_LifeTime_Rotation_Gravity.z);
+            p.SizeW_StartSize.xy, p.PosW.xyz, p.Age_LifeTime_Rotation_Gravity.z);
 
             ManualCollision(p.PosW, p.VelW.xyz, deltaTime, p.Age_LifeTime_Rotation_Gravity.x, p.Age_LifeTime_Rotation_Gravity.y
             , p.PosW, p.VelW.xyz, p.Age_LifeTime_Rotation_Gravity.x);
             
+            ManualTextureSheetAnimationForLifetime(p.QuadTexC, ratio, p.QuadTexC);
+
         }
         else
         {
@@ -243,7 +271,7 @@ void CS_Main(uint3 groupID : SV_GroupID, uint3 groupTreadID : SV_GroupThreadID, 
             p.InitEmitterPos = gCommonInfo.gTransformMatrix[3];
                     
                     [unroll]
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < TrailCount; i++)
             {
                 p.PrevPos[i] = float4(p.PosW, 1.0f);
             }

@@ -1,5 +1,6 @@
 #include "Core/Pass/3DObject/BasicPass.h"
 
+#include "Core/DirectX11/Depth.h"
 #include "util/VertexDesc.h"
 
 #include "Core/DirectX11/DXEngine.h"
@@ -64,6 +65,8 @@ namespace MuscleGrapics
 
 		memcpy(&data.gColor, &renderingData._materialInfo._color, sizeof(DUOLMath::Vector4));
 
+		memcpy(&data.gMetalicRoughnessAoSpecular, &renderingData._materialInfo._metalicRoughnessAoSpecular, sizeof(DUOLMath::Vector4));
+
 		UpdateConstantBuffer(1, data);
 
 		_d3dImmediateContext->IASetVertexBuffers(0, 1, vbibMesh->GetVB(), &stride, &offset); //버텍스 버퍼
@@ -93,14 +96,13 @@ namespace MuscleGrapics
 
 			renderTarget->SetRenderTargetView(
 				depth->GetDepthStencilView(0),
-				7,
-				renderTarget->GetRenderTexture()[(int)MutilRenderTexture::Depth]->GetRenderTargetView(),
-				renderTarget->GetRenderTexture()[(int)MutilRenderTexture::Normal]->GetRenderTargetView(),
-				renderTarget->GetRenderTexture()[(int)MutilRenderTexture::Position]->GetRenderTargetView(),
-				renderTarget->GetRenderTexture()[(int)MutilRenderTexture::Albedo]->GetRenderTargetView(),
-				renderTarget->GetRenderTexture()[(int)MutilRenderTexture::MatDiffuse]->GetRenderTargetView(),
-				renderTarget->GetRenderTexture()[(int)MutilRenderTexture::MatSpecular]->GetRenderTargetView(),
-				renderTarget->GetRenderTexture()[(int)MutilRenderTexture::ObjectID]->GetRenderTargetView()
+				6,
+				renderTarget->GetRenderTexture()[(int)MutilRenderTexture::Albedo]->GetRTV(),
+				renderTarget->GetRenderTexture()[(int)MutilRenderTexture::Depth]->GetRTV(),
+				renderTarget->GetRenderTexture()[(int)MutilRenderTexture::Normal]->GetRTV(),
+				renderTarget->GetRenderTexture()[(int)MutilRenderTexture::Position]->GetRTV(),
+				renderTarget->GetRenderTexture()[(int)MutilRenderTexture::MetallicRoughnessAOSpecular]->GetRTV(),
+				renderTarget->GetRenderTexture()[(int)MutilRenderTexture::ObjectID]->GetRTV()
 			);
 			break;
 		}
@@ -116,8 +118,6 @@ namespace MuscleGrapics
 
 			_d3dImmediateContext->PSSetShaderResources(1, 1, &DepthTex);
 
-			OrderIndependentTransparency::Get().BindingResource_UAV();
-
 			break;
 		}
 		case ShaderInfo::BLENDDATA_TYPE::AlphaSort:
@@ -126,7 +126,6 @@ namespace MuscleGrapics
 		default:
 			break;
 		}
-
 
 		_d3dImmediateContext->DrawIndexed(_drawIndex, 0, 0);
 	}

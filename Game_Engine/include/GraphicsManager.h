@@ -42,11 +42,11 @@ namespace Muscle
 
 		std::queue<std::shared_ptr<MuscleGrapics::TextData>> _textDataQueue;
 
-		std::queue<MuscleGrapics::DirectionalLightInfo> _dirLightInfoQueue;
+		//std::queue<MuscleGrapics::DirectionalLightInfo> _dirLightInfoQueue;
 
-		std::queue<MuscleGrapics::PointLightInfo> _pointLightInfoQueue;
+		//std::queue<MuscleGrapics::PointLightInfo> _pointLightInfoQueue;
 
-		std::queue<MuscleGrapics::SpotLightInfo> _spotLightInfoQueue;
+		//std::queue<MuscleGrapics::SpotLightInfo> _spotLightInfoQueue;
 
 		std::shared_ptr<MuscleGrapics::PerFrameData> _perframeData;
 
@@ -76,6 +76,8 @@ namespace Muscle
 
 		void TextureRelease();
 
+		void PostLightingData(MuscleGrapics::LightInfo& lightInfo);
+
 		void PostRenderingData_UI(std::shared_ptr<MuscleGrapics::RenderingData_UI>& renderingData);
 
 		void PostRenderingData_3D(std::shared_ptr<MuscleGrapics::RenderingData_3D>& renderingData);
@@ -83,12 +85,6 @@ namespace Muscle
 		void PostRenderingData_Particle(std::shared_ptr<MuscleGrapics::RenderingData_Particle>& renderingData);
 
 		void PostRenderingData_Imgui(std::function<void()>& renderingData);
-
-		void PostDirectionalLightInfo(MuscleGrapics::DirectionalLightInfo& dirLightInfo);
-
-		void PostPointLightInfo(MuscleGrapics::PointLightInfo& pointLightInfo);
-
-		void PostSpotLightInfo(MuscleGrapics::SpotLightInfo& spotLightInfo);
 
 		void PostTextData(std::shared_ptr<MuscleGrapics::TextData>& textData);
 
@@ -101,5 +97,7 @@ namespace Muscle
 		unsigned int PickObjectID(int x, int y);
 
 		ImGuiContext* GetImguiContext();
+	private:
+		unsigned int _lightingCount = 0;
 	};
 }

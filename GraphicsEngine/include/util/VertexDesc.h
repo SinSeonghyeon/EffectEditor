@@ -24,24 +24,25 @@ namespace MuscleGrapics
 		};
 		struct PixelData
 		{
-			PixelData() :Color(0xffffffff), Depth(0xffffffff), BlendType(0xffffffff)
+			PixelData() :Color(), DepthSum(0), PixelCount(0), alpha_multiple(1.0f)
 			{}
-			unsigned int Color;
-			float Depth;
-			unsigned BlendType;
+			DUOLMath::Vector4 Color;
+
+			float DepthSum;
+			unsigned int PixelCount;
+			float alphaSum;
+			float alpha_multiple;
 		};
 		struct PixelNode
 		{
-			PixelNode() :Data(), Next(0xffffffff)
+			PixelNode() :PixelData_Over(), PixelData_Additive()
 			{}
-			PixelData Data;
-			unsigned int Next;
+			PixelData PixelData_Over;
+			PixelData PixelData_Additive;
 		};
 	}
 	namespace Vertex
 	{
-
-
 		struct Basic
 		{
 			DUOLMath::Vector3 Pos;
@@ -70,7 +71,9 @@ namespace MuscleGrapics
 				Type(0),
 				StartColor(),
 				Color(),
-				TexIndex()
+				TexIndex(),
+				TrailWidth(1.0f),
+				TrailRecordTime(0.0f)
 			{
 			}
 			unsigned int Type;
@@ -89,9 +92,13 @@ namespace MuscleGrapics
 
 			DUOLMath::Vector4 InitEmitterPos;
 
-			DUOLMath::Vector4 PrevPos[15];
+			DUOLMath::Vector4 PrevPos[30];
 
 			DUOLMath::Vector4 LastestPrevPos;
+
+			float TrailWidth;
+			float TrailRecordTime;
+			DUOLMath::Vector2 TrailScrollSpeed;
 		};
 		struct Texture
 		{
@@ -188,17 +195,30 @@ namespace MuscleGrapics
 		{
 			Emission(Particle_Emission& _renderingData)
 			{
-				memcpy(this, reinterpret_cast<int*>(&_renderingData) + 1, sizeof(Particle_Emission) - sizeof(int));
+				gEmissiveCount = rand() % (abs(_renderingData._emissiveCount[1] - _renderingData._emissiveCount[0]) + 1) + _renderingData._emissiveCount[0];
+
+				gEmissiveTime = _renderingData._emissiveTime;
+
+				if (_renderingData._isRateOverDistance)
+					gIsRateOverDistance = 1;
+				else
+					gIsRateOverDistance = 0;
 			}
 			int	gEmissiveCount;			// 한번에 몇개를 방출 시킬지.
 			float	gEmissiveTime;			// 다음 방출까지 걸리는 시간.
-			DUOLMath::Vector2 pad5;
+			int	gIsRateOverDistance;			// 다음 방출까지 걸리는 시간.
+			float pad;
 		};
 		__declspec(align(16)) struct Shape // 10 ~ 13
 		{
 			Shape(Particle_Shape& _renderingData)
 			{
-				memcpy(this, reinterpret_cast<int*>(&_renderingData) + 2, sizeof(Particle_Shape) - sizeof(int) * 2);
+				memcpy(this, reinterpret_cast<int*>(&_renderingData) + 3, sizeof(Particle_Shape) - sizeof(int) * 3);
+
+				_edgeMode |= 1 << static_cast<unsigned int>(_renderingData._edgeMode);
+
+				if (gRadius == 0)
+					gRadius = 0.000001f;
 			}
 
 			float gAngle;
@@ -207,13 +227,18 @@ namespace MuscleGrapics
 			float gArc;
 
 			DUOLMath::Vector3 gPosition;
-			float pad0;
+			float _radiusThickness;
 
 			DUOLMath::Vector3 gRotation;
 			float pad1;
 
 			DUOLMath::Vector3 gScale;
 			float pad2;
+
+			int _edgeMode;
+			float _speed;
+			float _spread;
+			float pad3;
 		};
 		__declspec(align(16)) struct Velocity_over_Lifetime // 14 // 4
 		{
@@ -224,9 +249,29 @@ namespace MuscleGrapics
 			DUOLMath::Vector3 gVelocity;
 			float pad;
 			DUOLMath::Vector3 gOrbital;
-			float pad2;
+			unsigned int gIsGravity;
 			DUOLMath::Vector3 gOffset;
 			float pad3;
+		};
+		__declspec(align(16)) struct Limit_Velocity_Over_Lifetime // 14 // 4
+		{
+			Limit_Velocity_Over_Lifetime(Particle_Limit_Velocity_Over_Lifetime& _renderingData)
+			{
+				memcpy(this, reinterpret_cast<int*>(&_renderingData) + 1, sizeof(Particle_Limit_Velocity_Over_Lifetime) - sizeof(int));
+			}
+			DUOLMath::Vector2 gPointA;
+
+			DUOLMath::Vector2 gPointB;
+
+			DUOLMath::Vector2 gPointC;
+
+			DUOLMath::Vector2 gPointD;
+
+			float gSpeed;
+
+			float gDampen;
+
+			DUOLMath::Vector2 pad;
 		};
 		__declspec(align(16)) struct Force_over_LifeTime // 15 // 4
 		{
@@ -254,10 +299,10 @@ namespace MuscleGrapics
 			{
 				memcpy(this, reinterpret_cast<int*>(&_renderingData) + 1, sizeof(Particle_Size_Over_Lifetime) - sizeof(int));
 			}
-			float gStartSize;
-			float gEndSize;
-			float gStartOffset;
-			float gEndOffset;
+			DUOLMath::Vector2 gPointA;
+			DUOLMath::Vector2 gPointB;
+			DUOLMath::Vector2 gPointC;
+			DUOLMath::Vector2 gPointD;
 		};
 		__declspec(align(16)) struct Rotation_Over_Lifetime
 		{
@@ -329,7 +374,8 @@ namespace MuscleGrapics
 				gRatio = _renderingData._ratio;
 				gLifeTime = _renderingData._lifeTime;
 				gMinimumVertexDistance = _renderingData._minimumVertexDistance;
-				gWidthOverTrail = _renderingData._widthOverTrail;
+				gWidthOverTrail[0] = _renderingData._widthOverTrail[0];
+				gWidthOverTrail[1] = _renderingData._widthOverTrail[1];
 				gTrailVertexCount = _renderingData._trailVertexCount;
 
 				gTrailsFlag = 0;
@@ -362,25 +408,41 @@ namespace MuscleGrapics
 					gAlpha_Ratio_Trail[i] = _renderingData._alpha_Ratio_Trail[i];
 					gColor_Ratio_Trail[i] = _renderingData._color_Ratio_Trail[i];
 				}
+
+				gScrollXSpeed.x = _renderingData._scrollXSpeed[0];
+				gScrollXSpeed.y = _renderingData._scrollXSpeed[1];
+				gScrollYSpeed.x = _renderingData._scrollYSpeed[0];
+				gScrollYSpeed.y = _renderingData._scrollYSpeed[1];
+
+				gCondition = 0;
+				gCondition |= 1 << static_cast<int>(_renderingData._condition);
+				gRecordTime = _renderingData._recordTime;
 			}
 			float gRatio; // o
 			float gLifeTime; // o
 			float gMinimumVertexDistance; // o
-			float gWidthOverTrail; // o
+			int pad;
 
 			int gTrailsFlag;
 			int gTrailVertexCount;
-			int pad[2];
+			float gWidthOverTrail[2]; // o
 
 			DUOLMath::Vector4 gAlpha_Ratio_Lifetime[8]; // o
 			DUOLMath::Vector4 gColor_Ratio_Lifetime[8]; // o
 			DUOLMath::Vector4 gAlpha_Ratio_Trail[8]; // o
 			DUOLMath::Vector4 gColor_Ratio_Trail[8]; // o
 
+			DUOLMath::Vector2 gScrollXSpeed;
+			DUOLMath::Vector2 gScrollYSpeed;
+
+			unsigned int gCondition;
+			float gRecordTime;
+			DUOLMath::Vector2 pad123;
 		};
 		__declspec(align(16)) struct paticle_Renderer
 		{
 			paticle_Renderer(Particle_Renderer& _renderingData)
+
 			{
 				gSpeedScale = _renderingData._speedScale;
 
@@ -388,12 +450,14 @@ namespace MuscleGrapics
 
 				gBlendType = static_cast<unsigned int>(_renderingData._blendState);
 
-				pad = 0;
+				gRenderAlignment = 0;
+
+				gRenderAlignment |= 1 << static_cast<unsigned int>(_renderingData._renderAlignment);
 			}
 			float gSpeedScale;
 			float gLengthScale;
 			unsigned int gBlendType;
-			float pad;
+			unsigned int gRenderAlignment;
 		};
 		/**
 		 * \brief 오브젝트마다 공통되는 contant 버퍼 구조체, 수정할 때 항상 쉐이더 코드도 같이 수정하자. 16 바이트 정렬 잊지말자.
@@ -410,25 +474,8 @@ namespace MuscleGrapics
 
 			DUOLMath::Vector4 gColor;
 
-		};
+			DUOLMath::Vector4 gMetalicRoughnessAoSpecular;
 
-		__declspec(align(16)) struct CB_PerFream
-		{
-			DirectionalLight gDirLight;
-
-			PointLight gPointLight[10];
-
-			SpotLight gSpotLight;
-
-			DUOLMath::Vector3 gEyePosW;
-
-			int gPointCount;
-
-			DUOLMath::Matrix gLightViewProj;
-
-			DUOLMath::Matrix gCurrentViewProj; // 블러를 위한 것! 엥 필요없었네?
-
-			DUOLMath::Matrix gPrevViewProj; // 블러를 위한 것!
 		};
 
 		__declspec(align(16)) struct CB_PerObject_Particle
@@ -442,6 +489,8 @@ namespace MuscleGrapics
 			Shape _shape;
 
 			Velocity_over_Lifetime _velocityoverLifetime;
+
+			Limit_Velocity_Over_Lifetime _limitVelocityOverLifetime;
 
 			Force_over_LifeTime _forceoverLifetime;
 
@@ -465,18 +514,43 @@ namespace MuscleGrapics
 			float Pad[3];
 		};
 
-		__declspec(align(16)) struct CB_PerFream_Particle
+		__declspec(align(16)) struct Light
 		{
-			CB_PerFream_Particle(PerFrameData& perFreamData)
+			unsigned int Type;
+			DUOLMath::Vector3 Direction;
+
+			DUOLMath::Vector3 Position;
+			float Range;
+
+			DUOLMath::Vector3 Color;
+			float Intensity;
+
+			float Attenuation;
+			float AttenuationRadius;
+			DUOLMath::Vector2 pad;
+
+		};
+
+		__declspec(align(16)) struct CB_PerFream
+		{
+			CB_PerFream(PerFrameData& perFreamData)
 			{
+				memcpy(gLight, perFreamData._light, sizeof(Light) * 30);
+
 				gCameraPosW = perFreamData._cameraInfo._cameraWorldPosition;
+				gLightCount = perFreamData._lightCount;
+
 				gScreenXY = perFreamData._cameraInfo._screenSize;
 				gTimeStep = perFreamData._deltaTime;
 				gGamePlayTime = perFreamData._gamePlayTime;
+
 				gViewProj = perFreamData._cameraInfo._viewMatrix * perFreamData._cameraInfo._projMatrix;
 			}
+
+			Light gLight[LIGHT_INFO_MAX];
+
 			DUOLMath::Vector3 gCameraPosW; // 카메라의 좌표
-			float	pad999;
+			unsigned int gLightCount;
 
 			DUOLMath::Vector2 gScreenXY;
 			float	gTimeStep; // 1프레임당 시간
@@ -491,6 +565,7 @@ namespace MuscleGrapics
 			_emission(renderingData._emission),
 			_shape(renderingData._shape),
 			_velocityoverLifetime(renderingData._velocity_Over_Lifetime),
+			_limitVelocityOverLifetime(renderingData._limit_Velocity_Over_Lifetime),
 			_forceoverLifetime(renderingData._force_Over_Lifetime),
 			_coloroverLifetime(renderingData._color_Over_Lifetime),
 			_sizeoverLifetime(renderingData._size_Over_Lifetime),
@@ -533,6 +608,7 @@ namespace MuscleGrapics
 				DUOLMath::Matrix shapeTM = DUOLMath::Matrix::CreateScale(_shape.gScale) * DUOLMath::Matrix::CreateFromYawPitchRoll(_shape.gRotation.z, _shape.gRotation.x, _shape.gRotation.y) * DUOLMath::Matrix::CreateTranslation(_shape.gPosition);
 
 				world = shapeTM * renderingData._commonInfo._transformMatrix;
+
 				memcpy(&_commonInfo.gTransformMatrix, &world, sizeof(DUOLMath::Matrix));
 
 			}
